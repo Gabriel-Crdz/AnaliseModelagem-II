@@ -1,0 +1,96 @@
+@startuml Biblioteca
+
+left to right direction
+
+'CLASSES
+abstract class Usuario {
+  - idUsuario: Int
+  - nome: String
+  - email: String
+  - senha: String
+
+  + fazerLogin(): Boolean
+}
+
+class Leitor {
+  - telefone: String
+  - endereco: String
+
+  + consultarLivros(): List<Livro>
+  + realizarEmprestimo(livro: Livro): Emprestimo
+  + devolverLivro(emprestimo: Emprestimo): Boolean
+  + consultarMultas(): List<Multa>
+}
+
+class Bibliotecario {
+  - matricula: String
+
+  + cadastrarLivro(livro: Livro): Boolean
+  + editarLivro(livro: Livro): Boolean
+  + removerLivro(livro: Livro): Boolean
+  + registrarDevolucao(emprestimo: Emprestimo): Boolean
+  + aplicarMulta(emprestimo: Emprestimo): Multa
+}
+
+class Atendente {
+  - matricula: String
+
+  + cadastrarLeitor(leitor: Leitor): Boolean
+  + realizarEmprestimo(emprestimo: Emprestimo): Boolean
+  + registrarDevolucao(emprestimo: Emprestimo): Boolean
+}
+
+class Livro {
+  - idLivro: Int
+  - nome: String
+  - autor: String
+  - genero: String
+  - isbn: String
+  - status: String
+
+  + consultarDisponibilidade(): Boolean
+  + alterarStatus(status: String): Boolean
+}
+class Emprestimo {
+  - idEmprestimo: Int
+  - dataEmprestimo: Date
+  - dataPrevistaDevolucao: Date
+  - dataDevolucao: Date
+  - status: String
+
+  + realizar(): Boolean
+  + devolver(): Boolean
+  + verificarAtraso(): Boolean
+  + calcularMulta(): Float
+}
+class Multa {
+  - idMulta: Int
+  - valor: Float
+  - dataGeracao: Date
+  - dataPagamento: Date
+  - paga: Boolean
+
+  + calcularValor(): Float
+  + pagar(): Boolean
+}
+
+' HERANÇA
+Usuario <|-- Leitor
+Usuario <|-- Bibliotecario
+Usuario <|-- Atendente
+
+' RELACIONAMENTOS
+
+Leitor "1" -- "0..*" Emprestimo : realiza >
+
+Emprestimo "1" -- "1" Livro : refere-se a >
+
+Bibliotecario "1" -- "0..*" Livro : gerencia >
+
+Atendente "1" -- "0..*" Emprestimo : registra >
+
+Emprestimo "1" -- "0..1" Multa : gera >
+
+Leitor "1" -- "0..*" Multa : possui >
+
+@enduml

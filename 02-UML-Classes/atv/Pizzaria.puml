@@ -1,0 +1,113 @@
+@startuml Pizzaria
+
+' CLASSES
+abstract class Usuario {
+  - idUsuario: Int
+  - nome: String
+  - email: String
+  - senha: String
+
+  + fazerLogin(): Boolean
+}
+
+class Cliente {
+  - telefone: String
+  - endereco: String
+
+  + consultarCardapio(): List<Produto>
+  + realizarPedido(carrinho: List<ItemPedido>): Pedido
+  + acompanharStatus(pedido: Pedido): String
+}
+
+class Administrador {
+  - matricula: String
+
+  + cadastrarProduto(produto: Produto): Boolean
+  + editarProduto(produto: Produto): Boolean
+  + excluirProduto(produto: Produto): Boolean
+}
+
+class Atendente {
+  - matricula: String
+
+  + cadastrarPedido(pedido: Pedido): Boolean
+  + atualizarStatus(pedido: Pedido): Boolean
+}
+
+class Pizzaiolo {
+  - matricula: String
+
+  + aceitarPedido(pedido: Pedido): Boolean
+  + atualizarStatus(pedido: Pedido): Boolean
+}
+
+class Entregador {
+  - cnh: String
+  - veiculoChassi: String
+
+  + aceitarEntrega(entrega: Entrega): Boolean
+  + atualizarEntrega(entrega: Entrega): Boolean
+}
+
+class Produto {
+  - idProduto: Int
+  - nome: String
+  - descricao: String
+  - preco: Float
+}
+
+class Pedido {
+  - idPedido: Int
+  - data: DateTime
+  - status: String
+  - precoTotal: Float
+  - observacao: String
+
+  + adicionarItem(item: ItemPedido): Boolean
+  + removerItem(item: ItemPedido): Boolean
+  + calcularTotal(): Float
+  + atualizarStatus(status: StatusPedido): Boolean
+}
+
+class ItemPedido {
+  - idItemPedido: Int
+  - quantidade: Int
+  - subtotal: Float
+
+  + calcularSubtotal(): Float
+}
+
+' ENTREGA
+class Entrega {
+  - idEntrega: Int
+  - status: StatusEntrega
+  - enderecoCliente: String
+
+  + atualizarStatus(status: StatusEntrega): Boolean
+}
+
+' HERANÇA
+Usuario <|-- Cliente
+Usuario <|-- Administrador
+Usuario <|-- Atendente
+Usuario <|-- Pizzaiolo
+Usuario <|-- Entregador
+
+' RELACIONAMENTOS
+Cliente "1" -- "0..*" Pedido : realiza >
+
+Pedido "1" *-- "1..*" ItemPedido : possui >
+
+ItemPedido "*" --> "1" Produto : refere-se a >
+
+Pedido "1" -- "0..1" Entrega : possui >
+
+Entregador "1" -- "0..*" Entrega : realiza >
+
+Atendente "1" -- "0..*" Pedido : registra >
+
+Pizzaiolo "1" -- "0..*" Pedido : prepara >
+
+Administrador "1" -- "0..*" Produto : gerencia >
+
+@enduml

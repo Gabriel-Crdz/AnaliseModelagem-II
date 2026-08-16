@@ -1,0 +1,61 @@
+@startuml
+left to right direction
+title Pizzaria Delivery
+
+class Usuario {
+    - nome : String
+    - telefone : String
+    - email: String
+}
+
+class Cliente {
+    - endereco : String
+}
+
+class Atendente
+
+class Pizzaiolo
+
+class Entregador {
+    - veiculo : String
+}
+
+class Administrador
+
+Usuario <|-- Cliente
+Usuario <|-- Atendente
+Usuario <|-- Pizzaiolo
+Usuario <|-- Entregador
+Usuario <|-- Administrador
+
+class Pedido {
+    - numero: int
+    - data: Datetime
+    - status : String
+    + adicionarPizza()
+    + calcularTotal()
+    + alterarStatus()
+}
+
+class Pizza{
+    - tamanho : String
+    - precoBase : float
+    + adicionarSabor()
+    + calcularPreco()
+}
+
+class Sabor{
+    - nome : String
+    - descricao : String
+    - precoAdicional : float
+}
+
+Cliente "1" -- "0..*" Pedido : realiza
+Pedido "1" *-- "1..*" Pizza : contem
+Pizza "0..1" *-- "1..2" Sabor : possui
+
+Pedido "0..1" --> "1" Atendente : registrado pelo
+Pedido "0..1" --> "1" Pizzaiolo : preparado pelo
+Pedido "0..1" --> "1" Entregador : entregue pelo
+
+@enduml
