@@ -1,0 +1,49 @@
+@startuml
+
+actor Cliente
+
+boundary "Tela de Pedidos" as Tela
+
+control "Pedido Controller" as Controller
+
+entity Pedido
+
+database "Banco dados" as Banco
+
+Queue "Fila de notificacoes" as Fila
+
+Cliente -> Tela : Selecionar Produto
+
+Tela -> Controller: Criar pedido
+activate Controller
+
+Controller -> Pedido: Criar()
+activate Pedido
+
+Pedido -> Banco: Salvar pedido
+activate Banco
+
+Banco --> Pedido: Confirmação
+deactivate Banco
+
+Pedido --> Controller: Pedido criado
+deactivate Pedido
+
+alt Pagamento Aprovado
+
+  Controller --> Tela: Pedido confirmado
+  
+  Controller --> Fila: Enviar evento
+  
+else Pagamento Recusado
+
+  Controller --> Tela: Informa erro
+
+end
+  
+deactivate Controller
+
+Tela --> Cliente: Exibir resultado
+
+
+@enduml

@@ -1,0 +1,29 @@
+@startuml
+
+actor "Atendente" as Atendente
+
+boundary "Interface Emprestimo" as Interface
+
+control "Sistema Biblioteca" as Controller
+
+entity "Usuario" as Usuario
+entity "Livro" as Livro
+entity "Emprestimo" as Emprestimo
+
+database "Banco de Dados" as Banco
+
+Atendente -> Interface: solicitarEmprestimo(Usuario, livro)
+
+Interface -> Controller: realizarEmprestimo(Usuario, Livro)
+
+activate Controller
+
+Controller -> Usuario: verificarSituacao()
+
+activate Usuario
+
+Usuario --> Controller: usuarioApto
+
+deactivate Usuario
+
+@enduml
