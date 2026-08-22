@@ -17,13 +17,47 @@ Atendente -> Interface: solicitarEmprestimo(Usuario, livro)
 Interface -> Controller: realizarEmprestimo(Usuario, Livro)
 
 activate Controller
-
 Controller -> Usuario: verificarSituacao()
 
 activate Usuario
-
 Usuario --> Controller: usuarioApto
-
 deactivate Usuario
+
+Controller -> Livro: verificarDisponibilidade()
+
+activate Livro
+Livro --> Controller : livroDisponivel
+deactivate Livro
+
+alt Usuario apto & Livro disponivel
+  Controller -> Emprestimo : criar(Usuario, Livro)
+  
+  activate Emprestimo
+  Emprestimo --> Controller : emprestimoCriado
+  deactivate Emprestimo
+  
+  Controller -> Banco : salvar(Emprestimo)
+  
+  activate Banco
+  Banco --> Controller : emprestimo salvo
+  deactivate Banco
+  
+  Controller -> Livro : atualizarStatus("emprestado") 
+  
+  activate Livro
+  Livro --> Controller : statusAtualizado 
+  deactivate Livro
+  
+  Controller --> Interface : confirmarEmprestimo()
+  
+  Interface --> Atendente : exibirConfirmação()
+else Usuario não apto & Livro indisponivel
+
+  Controller --> Interface : informarErro()
+
+  Interface --> Atendente : exibirMenssagemErro()
+end
+
+deactivate Controller
 
 @enduml
