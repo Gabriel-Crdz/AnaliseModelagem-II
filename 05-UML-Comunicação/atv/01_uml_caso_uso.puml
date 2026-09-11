@@ -1,0 +1,51 @@
+@startuml
+left to right direction
+
+' ATORES
+actor "Usuário" as Usuario
+actor "Artista" as Artista
+
+Artista --|> Usuario
+
+rectangle "Aplicativo de Musica" {
+
+    ' AUTENTICAÇÃO
+    package "Autenticação" {
+        usecase "Cadastrar Usuário" as UC01
+        usecase "Realizar Login" as UC02
+    }
+
+    ' MÚSICAS
+    package "Músicas" {
+        usecase "Buscar Música" as UC03
+        usecase "Cadastrar Música" as UC08
+    }
+
+    ' PLAYLISTS
+    package "Playlists" {
+        usecase "Criar Playlist" as UC04
+        usecase "Adicionar Música\nna Playlist" as UC05
+        usecase "Remover Música\nda Playlist" as UC06
+        usecase "Reproduzir Playlist" as UC07
+    }
+}
+
+' ASSOCIAÇÕES
+Usuario -- UC01
+Usuario -- UC02
+Usuario -- UC03
+Usuario -- UC04
+Usuario -- UC05
+Usuario -- UC06
+Usuario -- UC07
+
+Artista -- UC08
+
+' RELACIONAMENTOS
+UC01 ..> UC02: <<extend>>
+UC04 ..> UC02: <<include>>
+UC05 ..> UC04: <<include>>
+UC06 ..> UC04: <<include>>
+UC07 ..> UC04: <<include>>
+
+@enduml

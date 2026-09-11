@@ -1,0 +1,39 @@
+@startuml
+left to right direction
+
+title Adicionar Música à Playlist
+
+object "usuario : Usuario" as usuario
+object "tela : TelaPlaylist" as tela
+object "controller : PlaylistController" as controller
+object "playlist1 : Playlist" as playlist
+object "musica1 : Musica" as musica
+object "DB : database" as db
+
+usuario --> tela : 1. selecionaMusica()
+tela --> controller : 2. adicionarMusica(playlistId, musicaId)
+
+controller --> db : 3. buscarPlaylist(playlistId)
+db --> controller : 4. dados da Playlist
+controller --> playlist : 5. carregar(dados da Playlist)
+playlist --> controller : 6. playlist : Playlist
+
+controller --> db : 7. buscarMusica(musicaId)
+db --> controller : 8. dados da Música
+controller --> musica : 9. carregar(dados da Música)
+musica --> controller : 10. musica : Musica
+
+controller --> playlist : 11. adicionarMusica(musica)
+playlist --> playlist : 12. verificarSeMusicaExiste(musica)
+
+playlist --> controller : 13. [música não existe] Música adicionada
+controller --> db : 14. [música não existe] salvar(playlist)
+db --> controller : 15. Operação confirmada
+controller --> tela : 16. [música não existe] Sucesso
+tela --> usuario : 17. [música não existe] Música adicionada com sucesso!
+
+playlist --> controller : 13. [música existe] Música já existe
+controller --> tela : 14. [música existe] Erro
+tela --> usuario : 15. [música existe] Música já está na playlist!
+
+@enduml

@@ -1,0 +1,79 @@
+
+@startuml
+
+title Adicionar Música à Playlist
+
+actor Usuario
+boundary TelaPlaylist
+control PlaylistController
+entity Playlist
+entity Musica
+database BancoDeDados
+
+Usuario -> TelaPlaylist : Seleciona música\n"Adicionar à Playlist"
+activate TelaPlaylist
+
+TelaPlaylist -> PlaylistController : adicionarMusica(playlistId, musicaId)
+activate PlaylistController
+
+PlaylistController -> BancoDeDados : buscarPlaylist(playlistId)
+
+activate BancoDeDados
+BancoDeDados --> PlaylistController : dados da Playlist
+deactivate BancoDeDados
+
+PlaylistController -> Playlist : carregar(dados da Playlist)
+
+activate Playlist
+Playlist --> PlaylistController : playlist : Playlist
+deactivate Playlist
+
+PlaylistController -> BancoDeDados : buscarMusica(musicaId)
+
+activate BancoDeDados
+BancoDeDados --> PlaylistController : dados da Música
+deactivate BancoDeDados
+
+PlaylistController -> Musica : carregar(dados da Música)
+
+activate Musica
+Musica --> PlaylistController : musica : Musica
+deactivate Musica
+
+PlaylistController -> Playlist : adicionarMusica(musica)
+activate Playlist
+
+Playlist -> Playlist : verificarSeMusicaExiste(musica)
+
+alt Música não está na playlist
+
+    Playlist --> PlaylistController : Música adicionada
+    deactivate Playlist
+
+    PlaylistController -> BancoDeDados : salvar(playlist)
+    activate BancoDeDados
+
+    BancoDeDados --> PlaylistController : Operação confirmada
+
+    deactivate BancoDeDados
+
+    PlaylistController --> TelaPlaylist : Sucesso
+    deactivate PlaylistController
+
+    TelaPlaylist --> Usuario : "Música adicionada\ncom sucesso!"
+    deactivate TelaPlaylist
+
+else Música já está na playlist
+
+    Playlist --> PlaylistController : Música já existe
+    deactivate Playlist
+
+    PlaylistController --> TelaPlaylist : Erro
+    deactivate PlaylistController
+
+    TelaPlaylist --> Usuario : "Música já está\nna playlist!"
+    deactivate TelaPlaylist
+
+end
+
+@enduml

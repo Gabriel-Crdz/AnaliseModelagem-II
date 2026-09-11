@@ -1,0 +1,51 @@
+@startuml
+left to right direction
+
+object "gabriel: Usuario" as gabriel {
+    id = 1
+    nome = "Gabriel"
+    email = "gabriel@email.com"
+    senha = "******"
+}
+
+object "Vinicius: Artista" as joao {
+    id = 2
+    nome = "Vinicius"
+    email = "vncs@email.com"
+    senha = "******"
+    nomeArtistico = "VRambo"
+}
+
+object "favoritas: Playlist" as playlist {
+    id = 10
+    nome = "Minhas Favoritas"
+    qtdMusicas = 2
+}
+
+object "musica01: Musica" as musica1 {
+    id = 101
+    titulo = "Amor ao Linux"
+    duracao = 210
+    genero = "Pop"
+}
+
+object "musica02: Musica" as musica2 {
+    id = 102
+    titulo = "Maldito Apache"
+    duracao = 185
+    genero = "Rock Metal"
+}
+
+' RELACIONAMENTOS
+gabriel -- playlist : possui
+
+playlist -- musica1 : contém
+playlist -- musica2 : contém
+
+joao -- musica1 : cadastra
+joao -- musica2 : cadastra
+
+gabriel .. musica1 : busca
+gabriel .. musica2 : busca
+
+@enduml

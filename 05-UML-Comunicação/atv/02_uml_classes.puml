@@ -1,0 +1,53 @@
+@startuml
+left to right direction
+
+class Usuario {
+    - id: int
+    - nome: String
+    - email: String
+    - senha: String
+
+    + cadastrar(): void
+    + realizarLogin(): boolean
+    + buscarMusica(): List<Musica>
+}
+
+class Artista {
+    - nomeArtistico: String
+
+    + cadastrarMusica(): void
+}
+
+class Musica {
+    - id: int
+    - titulo: String
+    - duracao: int
+    - genero: String
+
+    + reproduzir(): void
+}
+
+class Playlist {
+    - id: int
+    - nome: String
+    - qtdMusicas: int
+
+    + adicionarMusica(musica: Musica): void
+    + removerMusica(musica: Musica): void
+    + reproduzir(): void
+}
+
+Usuario <|-- Artista
+
+' RELACIONAMENTOS
+Usuario "1" -- "0..*" Playlist : possui
+
+Playlist "1" o-- "0..*" Musica : contém
+
+Artista "1" -- "0..*" Musica : cadastra
+
+Usuario ..> Musica : busca
+Usuario ..> Playlist : gerencia
+
+
+@enduml
