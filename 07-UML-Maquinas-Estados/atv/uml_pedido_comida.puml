@@ -1,0 +1,49 @@
+@startuml PedidoComida
+title "Pedido de Comida"
+
+state "Pedido iniciado" as PedidoIniciado
+state "Pedido realizado" as PedidoRealizado
+state "Aguardando pagamento" as AguardandoPagamento 
+state "Pagamento aprovado" as PagamentoAprovado
+state "Pagamento recusado" as PagamentoRecusado
+state "Pedido aceito pelo restaurante" as PedidoAceito
+state "Em preparação" as EmPreparacao
+state "Pronto" as Pronto
+state "Aguardando entregador" as AguardandoEntregador
+state "Em entrega" as EmEntrega
+state "Entregue" as Entregue
+state "Cancelado" as Cancelado
+
+state EscolhaPagamento <<choice>>
+
+[*] --> PedidoIniciado
+PedidoIniciado --> PedidoRealizado : confirmar pedido
+PedidoRealizado --> AguardandoPagamento : solicitar pagamento
+PedidoRealizado --> Cancelado : cancelar pedido
+
+AguardandoPagamento --> EscolhaPagamento : processar pagamento
+
+EscolhaPagamento --> PagamentoAprovado : [aprovado]
+EscolhaPagamento --> PagamentoRecusado : [recusado]
+
+PagamentoRecusado --> AguardandoPagamento : tentar novamente
+PagamentoRecusado --> Cancelado : cancelar pedido
+
+PagamentoAprovado --> PedidoAceito : restaurando aceitar pedido
+
+PedidoAceito --> EmPreparacao : iniciar preparação
+
+EmPreparacao --> Pronto: finalizar preparação
+
+Pronto --> AguardandoEntregador : solicitar entregador
+
+AguardandoEntregador --> EmEntrega : entregador disponivel
+AguardandoEntregador --> Cancelado : cancelar pedido
+
+EmEntrega --> Entregue : realizar entrega
+EmEntrega --> Cancelado : cancelar pedido
+
+Entregue --> [*]
+Cancelado --> [*]
+
+@enduml

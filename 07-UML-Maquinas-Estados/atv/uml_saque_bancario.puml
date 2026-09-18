@@ -1,0 +1,30 @@
+@startuml SaqueBancario
+title "Saque Bancario"
+
+[*] --> AguardandoCartao
+
+state "Aguardando Cartão" as AguardandoCartao
+state "Cartão Inserido" as CartaoInserido
+state "Aguardando Senha" as AguardandoSenha
+state "Verificando Senha" as VerificandoSenha
+state "Senha Incorreta" as SenhaIncorreta
+state "Aguardado valor" as AguardandoValor
+state "Verificando Saldo" as VerificandoSaldo
+state "Liberando o Dinheiro" as LiberandoDinheiro
+state "Devolvendo cartão" as DevolvendoCartao
+state "Operação Cancelada" as OperacaoCancelada
+
+state EscolhaSenha <<choice>>
+
+AguardadoCartao --> CartaoInserido : inserir cartão
+CartaoInserido --> AguardadoSenha : solicitar senha
+AguardadoSenha --> VerificandoSenha : informar senha
+
+VerificandoSenha --> EscolhaSenha
+VerificandoSenha --> AguardadoValor : [senha correta]
+VerificandoSenha --> SenhaIncorreta : [senha incorreta]
+
+SenhaIncorreta --> AguardadoSenha : tentar novamente
+SenhaIncorreta --> OperacaoCancelada : 
+
+@enduml
