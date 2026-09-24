@@ -1,30 +1,46 @@
-@startuml SaqueBancario
-title "Saque Bancario"
+@startuml diagrama_saque_bancario
+title Saque Bancário
 
 [*] --> AguardandoCartao
-
 state "Aguardando Cartão" as AguardandoCartao
 state "Cartão Inserido" as CartaoInserido
 state "Aguardando Senha" as AguardandoSenha
 state "Verificando Senha" as VerificandoSenha
-state "Senha Incorreta" as SenhaIncorreta
-state "Aguardado valor" as AguardandoValor
+state "Senha incorreta" as SenhaIncorreta
+state "Aguardando valor" as AguardandoValor
 state "Verificando Saldo" as VerificandoSaldo
+state "Saque Autorizado" as SaqueAutorizado
+state "Saque Recusado" as SaqueRecusado
 state "Liberando o Dinheiro" as LiberandoDinheiro
 state "Devolvendo cartão" as DevolvendoCartao
+state "Operação Concluída" as OperacaoConcluida
 state "Operação Cancelada" as OperacaoCancelada
 
 state EscolhaSenha <<choice>>
+state EscolhaSaldo <<choice>>
 
-AguardadoCartao --> CartaoInserido : inserir cartão
-CartaoInserido --> AguardadoSenha : solicitar senha
-AguardadoSenha --> VerificandoSenha : informar senha
-
+AguardandoCartao --> CartaoInserido : inserir cartão
+CartaoInserido --> AguardandoSenha : solicitar senha
+AguardandoSenha --> VerificandoSenha : informar senha
 VerificandoSenha --> EscolhaSenha
-VerificandoSenha --> AguardadoValor : [senha correta]
-VerificandoSenha --> SenhaIncorreta : [senha incorreta]
+EscolhaSenha --> AguardandoValor : [senha correta]
+EscolhaSenha --> SenhaIncorreta : [senha incorreta]
+SenhaIncorreta --> AguardandoSenha : tentar novamente
+SenhaIncorreta --> OperacaoCancelada : exceder tentativas
+AguardandoValor --> VerificandoSaldo: informar valor
+AguardandoValor --> OperacaoCancelada: cancelar
 
-SenhaIncorreta --> AguardadoSenha : tentar novamente
-SenhaIncorreta --> OperacaoCancelada : 
+VerificandoSaldo --> EscolhaSaldo
+EscolhaSaldo --> SaqueAutorizado: [saldo suficiente]
+EscolhaSaldo --> SaqueRecusado: [saldo insuficiente]
+
+SaqueRecusado --> AguardandoValor: informar outro valor
+SaqueRecusado --> OperacaoCancelada : cancelar
+
+SaqueAutorizado --> LiberandoDinheiro: liberar dinheiro
+LiberandoDinheiro --> DevolvendoCartao: dinheiro retirado
+DevolvendoCartao --> OperacaoConcluida: cartão devolvido
+OperacaoCancelada --> DevolvendoCartao: devolver cartão
+OperacaoConcluida --> [*]
 
 @enduml
