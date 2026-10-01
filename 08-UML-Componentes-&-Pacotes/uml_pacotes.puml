@@ -1,0 +1,87 @@
+@startuml
+title Diagrama de Pacotes - Aplicativo de Delivery
+
+left to right direction
+
+package "ui" {
+
+    package "app/web" {
+        class LoginTela
+        class CardapioTela
+        class PedidoTela
+        class PagamentoTela
+        class AcompanhamentoTela
+    }
+}
+
+package "domain" {
+
+    package "usuario" {
+        class Usuario
+    }
+
+    package "pedido" {
+        class Pedido
+        class Item
+    }
+
+    package "cardapio" {
+        class CardapioItem
+    }
+}
+
+package "service" {
+
+    package "pedido" {
+        class PedidoService
+    }
+
+    package "pagamento" {
+        class PagamentoService
+    }
+
+    package "notificacao" {
+        class NotificacaoService
+    }
+}
+
+package "infra" {
+
+    package "persistencia" {
+        class BancoDados
+    }
+
+    package "externo" {
+        class GatewayPagamento
+        class ServicoMapas
+        class ServicoNotificacao
+    }
+}
+
+' DEPENDÊNCIAS
+LoginTela ...> PedidoService
+CardapioTela ...> PedidoService
+PedidoTela ...> PedidoService
+PagamentoTela ...> PagamentoService
+AcompanhamentoTela ...> PedidoService
+
+PedidoService ..> Pedido
+PedidoService ..> CardapioItem
+
+PagamentoService ..> Pedido
+NotificacaoService ..> Pedido
+NotificacaoService ..> Usuario
+
+PedidoService ...> BancoDados
+PedidoService ...> ServicoMapas
+
+PagamentoService ..> GatewayPagamento
+NotificacaoService ..> ServicoNotificacao
+
+
+' RELACIONAMENTOS
+Pedido "1" o-- "*" Item
+Item "*" --> "1" CardapioItem
+Pedido "*" --> "1" Usuario
+
+@enduml

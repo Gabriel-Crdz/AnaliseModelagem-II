@@ -1,0 +1,32 @@
+@startuml
+title Diagrama de componentes - Aplicativo de Delivery
+
+component "App Mobile\n(cliente)" as AppMobile
+
+package "Servidor" {
+    component "API REST" as API
+    component "Pedido Service" as PedidoService
+    component "Auth Service" as AuthService
+    component "Notificação Service" as NotificacaoService
+    database "Banco de Dados" as BancoDados
+}
+
+package "Serviços Externos" {
+    component "Gateway Pagamento" as GatewayPagamento
+    component "Serviço de Mapas" as ServicoMapas
+}
+
+
+' CONEXÕES
+AppMobile --> API : requisições HTTP/REST
+
+API --> AuthService : autenticar / registrar
+
+API --> PedidoService : operações de pedidos
+
+PedidoService --> BancoDados : persistência de dados
+PedidoService --> NotificacaoService : enviar notificações
+PedidoService --> GatewayPagamento : processar pagamento
+PedidoService --> ServicoMapas : consultar mapas/localização
+
+@enduml
