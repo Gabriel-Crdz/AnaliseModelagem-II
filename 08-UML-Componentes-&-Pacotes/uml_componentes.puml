@@ -12,10 +12,9 @@ package "Servidor" {
 }
 
 package "Serviços Externos" {
-    component "Gateway Pagamento" as GatewayPagamento
-    component "Serviço de Mapas" as ServicoMapas
+    cloud "Gateway Pagamento" as GatewayPagamento
+    cloud "Serviço de Mapas" as ServicoMapas
 }
-
 
 ' CONEXÕES
 AppMobile --> API : requisições HTTP/REST

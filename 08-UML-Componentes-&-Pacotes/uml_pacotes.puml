@@ -15,19 +15,11 @@ package "ui" {
 }
 
 package "domain" {
+  class Usuario
+  class Pedido
+  class Item
+  class CardapioItem
 
-    package "usuario" {
-        class Usuario
-    }
-
-    package "pedido" {
-        class Pedido
-        class Item
-    }
-
-    package "cardapio" {
-        class CardapioItem
-    }
 }
 
 package "service" {
