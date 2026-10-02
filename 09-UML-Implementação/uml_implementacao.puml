@@ -1,0 +1,28 @@
+@startuml
+
+node "Smartphone" as smartphone{
+    artifact "App Mobile"
+}
+
+node "Servidor de Aplicação" as servidor{
+    artifact "API REST" as api
+    artifact "PedidoServer"
+    artifact "AuthServer"
+    artifact "NotificacaoServer"
+
+}
+
+database "Servidor BD" as bd{
+    artifact "PostgreSQL DB"
+}
+
+cloud "Serviços Externos" as externos{
+    artifact "GatewayPagamento"
+    artifact "ServidorMapas"
+}
+
+smartphone --> servidor : HTTPS
+servidor --> bd : TCP/SQL
+servidor --> externos : HTTPS
+
+@enduml
