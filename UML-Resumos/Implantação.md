@@ -17,4 +17,4 @@ Indica os tipos dos dispositivos
 
 Indica conexões entre os nós ou entre os artefatos
 
-![alt text](./img/implantacao/implantacao_02.png.png)
+![alt text](./img/implantacao/implantacao_02.png)
